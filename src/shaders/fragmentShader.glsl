@@ -29,14 +29,14 @@ void main(void){
 		float attFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
 		vec3 unitLightVector = normalize(toLightVector[i]);	
 		float nDotl = dot(unitNormal,unitLightVector); //float representative of how bright the pixel should be
-		float brightness = max(nDotl,0.0); //should always be between 0 and 1. we don't care about negatives. that 0.2 makes sure that the brightness never goes below 0.2 --> ambient light. never black
+		float brightness = max(nDotl,0.0); // EQUATION OF DIFFUSE LIGHT. should always be between 0 and 1. we don't care about negatives. that 0.2 makes sure that the brightness never goes below 0.2 --> ambient light. never black
 		vec3 lightDirection = -unitLightVector; //need to create the vector that points in the direction that the light is coming from, which is the opposite of the vector pointing towards the light that we had in the diffuse lighting
 		//now, we only need the reflected light vector
 		vec3 reflectedLightDirection = reflect(lightDirection,unitNormal);
 		//and finally, we can do the dot product between the camera vector and the reflectance vector:
 		float specularFactor = dot(reflectedLightDirection , unitVectorToCamera);  //indicates how bright, without any dampening, the pixel should be
 		specularFactor = max(specularFactor,0.0); //has to stay positive
-		float dampedFactor = pow(specularFactor,shineDamper); //we apply the damping of the material
+		float dampedFactor = pow(specularFactor,shineDamper); //we apply the damping of the material. EQUATION FOR SPECULAR LIGHT
 		totalDiffuse = totalDiffuse + (brightness * lightColour[i])/attFactor;
 
 		//now, we can multiply the damped factor factor by the light colour, so that the specular light is the colour of the light source
